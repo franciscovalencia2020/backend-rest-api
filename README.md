@@ -8,13 +8,40 @@ Este proyecto es una API REST para manejar evaluaciones de empleados, usuarios, 
    ```bash
    git clone <url-del-repo>
    ```
+2. **Instala Redis en tu maquila local**: Para instalar Redis en tu máquina local, sigue estos pasos según tu sistema operativo:
 
-2. **Instala las dependencias**: Navega a la carpeta del proyecto y ejecuta:
+   * **En Windows**:
+
+     1. **Redis para Windows**:
+           ```bash
+            https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/
+           ```
+   * **En macOS (con Homebrew)**:
+     1. **Abre una terminal y ejecuta**:
+           ```bash
+            brew install redis
+           ```
+     2. **Inicia Redis con**:
+           ```bash
+            brew services start redis
+           ```
+   * **En Linux (Ubuntu)**:
+     1. **Abre una terminal y ejecuta**:
+           ```bash
+            sudo apt update
+            sudo apt install redis-server
+           ```
+     2. **Puedes iniciarlo con**:
+           ```bash
+            sudo systemctl start redis
+           ```
+
+3. **Instala las dependencias**: Navega a la carpeta del proyecto y ejecuta:
    ```bash
    npm install
    ```
 
-3. **Configura las variables de entorno**: Crea un archivo .env en la raíz del proyecto usando .env.template como referencia. Este archivo debería incluir configuraciones como el URI de la base de datos y claves secretas:
+4. **Configura las variables de entorno**: Crea un archivo .env en la raíz del proyecto usando .env.template como referencia. Este archivo debería incluir configuraciones como el URI de la base de datos y claves secretas:
    ```bash
    PORT=3000
    MONGO_URI=my_mongo_uri
@@ -23,11 +50,11 @@ Este proyecto es una API REST para manejar evaluaciones de empleados, usuarios, 
    DB_TEST_NAME=my_db_name_test
    ```
 
-4. **Compila el proyecto**: Compila el código TypeScript a JavaScript ejecutando:
+5. **Compila el proyecto**: Compila el código TypeScript a JavaScript ejecutando:
    ```bash
    npm run build
    ```
-5. **Ejecuta el proyecto**:
+6. **Ejecuta el proyecto**:
    - **Para el entorno de desarrollo**:
      ```bash
       npm run dev
