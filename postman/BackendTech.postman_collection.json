@@ -1,0 +1,659 @@
+{
+	"info": {
+		"_postman_id": "df82c480-5b93-49b4-96a5-48dad5516312",
+		"name": "BackendTech",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19115693"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Empleado User 5\",\r\n  \"email\": \"empleado5@example.com\",\r\n  \"password\": \"EmpleadoPassword*123\",\r\n  \"role\": \"empleado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"empleado@example.com\",\r\n  \"password\": \"EmpleadoPassword*123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"672df5a6647c5c73f659c49f\",\r\n  \"position\": \"Software Developer 5\",\r\n  \"department\": \"IT\",\r\n  \"salary\": 60000,\r\n  \"skills\": [\"JavaScript\", \"Node.js\", \"MongoDB\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"position\": \"Software Developer 1\",\r\n    \"department\": \"IT\",\r\n    \"salary\": 60000,\r\n    \"skills\": [\"JavaScript\", \"Node.js\", \"MongoDB\", \"Python\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/employees/672df55a647c5c73f659c483",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"employees",
+								"672df55a647c5c73f659c483"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/employees?page=1&limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"employees"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/employees/672df55a647c5c73f659c483",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"employees",
+								"672df55a647c5c73f659c483"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Evaluation",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"employeeId\": \"672df51e647c5c73f659c477\",\r\n  \"reviewerId\": \"672df504647c5c73f659c471\",\r\n  \"period\": \"2024-Q1\",\r\n  \"type\": \"Rendimiento Mensual 3\",\r\n  \"status\": \"completed\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/evaluations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"evaluations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"answers\": [\r\n    {\r\n      \"questionId\": \"672e1b51de543995cba43b0f\",\r\n      \"answerText\": \"Node.js es un entorno de ejecución para JavaScript que permite construir aplicaciones del lado del servidor y trabajar con operaciones de red, bases de datos y más.\"\r\n    },\r\n    {\r\n      \"questionId\": \"672e1b51de543995cba43b10\",\r\n      \"answerText\": \"El event loop en Node.js es un mecanismo que permite manejar operaciones asíncronas en una sola hebra, permitiendo que las tareas no bloqueen la ejecución del código.\"\r\n    },\r\n    {\r\n      \"questionId\": \"672e1b51de543995cba43b11\",\r\n      \"answerText\": \"JavaScript en el navegador se ejecuta en un entorno limitado y no tiene acceso a recursos del sistema, mientras que en Node.js se puede acceder al sistema de archivos, crear servidores y realizar operaciones de red.\"\r\n    },\r\n    {\r\n      \"questionId\": \"672e1b51de543995cba43b12\",\r\n      \"answerText\": \"Algunos módulos nativos de Node.js son 'fs' para trabajar con el sistema de archivos, 'http' para crear servidores web, y 'path' para manipular rutas de archivos y directorios.\"\r\n    },\r\n    {\r\n      \"questionId\": \"672e1b51de543995cba43b13\",\r\n      \"answerText\": \"En Node.js se pueden manejar errores usando bloques try/catch, escuchando eventos 'error' en streams y manejando promesas correctamente.\"\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/evaluations/672e1b2fde543995cba43b05/submit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"evaluations",
+								"672e1b2fde543995cba43b05",
+								"submit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Evaluate",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"answers\": [\r\n    {\r\n      \"questionId\": \"672dfc99076b76cfba1c5507\",\r\n      \"score\": 5\r\n    },\r\n    {\r\n      \"questionId\": \"672dfc99076b76cfba1c5508\",\r\n      \"score\": 4\r\n    },\r\n    {\r\n      \"questionId\": \"672dfc99076b76cfba1c5509\",\r\n      \"score\": 5\r\n    },\r\n    {\r\n      \"questionId\": \"672dfc99076b76cfba1c550a\",\r\n      \"score\": 4\r\n    },\r\n    {\r\n      \"questionId\": \"672dfc99076b76cfba1c550b\",\r\n      \"score\": 5\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/evaluations/672dfa757dbf63444c835948/evaluate",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"evaluations",
+								"672dfa757dbf63444c835948",
+								"evaluate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"period\": \"2024-Q2\",\r\n    \"type\": \"Evaluación Trimestral......\",\r\n    \"status\": \"pending\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/evaluations/672e1662ab4d8f07845f9129",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"evaluations",
+								"672e1662ab4d8f07845f9129"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/evaluations?page=1&limit=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"evaluations"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/evaluations/672e1b2fde543995cba43b05",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"evaluations",
+								"672e1b2fde543995cba43b05"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Question",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/questions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"evaluationId\": \"672e1b2fde543995cba43b05\",\r\n  \"questions\": [\r\n    \"¿Qué es Node.js y cuáles son sus usos principales?\",\r\n    \"Explica cómo funciona el event loop en Node.js.\",\r\n    \"¿Cuáles son las diferencias entre JavaScript en el navegador y en Node.js?\",\r\n    \"Menciona algunos módulos nativos de Node.js y sus funciones.\",\r\n    \"¿Cómo manejarías errores en una aplicación de Node.js?\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/questions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"evaluationId\": \"672dfa757dbf63444c835948\",\r\n    \"content\": \"¿Qué es el rendimiento en una aplicación y cómo lo optimizarías?????\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/questions/672dfc99076b76cfba1c5507",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"questions",
+								"672dfc99076b76cfba1c5507"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Get By Employee",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/reports/employee/672df51e647c5c73f659c477",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reports",
+								"employee",
+								"672df51e647c5c73f659c477"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Departament",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/reports/department/IT",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"reports",
+								"department",
+								"IT"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Welcome",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

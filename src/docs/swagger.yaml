@@ -1,0 +1,1346 @@
+openapi: 3.0.0
+info:
+  title: Rest Api
+  version: 1.0.0
+  description: Documentación de la Rest API
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /auth/register:
+    post:
+      summary: "Registro de nuevo usuario"
+      description: "Permite registrar un nuevo usuario en el sistema."
+      tags:
+        - "Authentication"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Empleado User"
+                email:
+                  type: string
+                  example: "empleado@example.com"
+                password:
+                  type: string
+                  example: "EmpleadoPassword*123"
+                role:
+                  type: string
+                  enum: ["empleado", "manager", "admin"]
+                  example: "empleado"
+      responses:
+        '200':
+          description: "Usuario registrado exitosamente"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: "672db24b4fb984d3ae8d90cf"
+                  message:
+                    type: string
+                    example: "Usuario registrado exitosamente"
+        '400':
+          description: "Solicitud incorrecta"
+        '500':
+          description: "Error interno del servidor"
+  /auth/login:
+    post:
+      summary: "Inicio de sesión"
+      description: "Permite que un usuario inicie sesión y reciba un token JWT."
+      tags:
+        - "Authentication"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "admin@example.com"
+                password:
+                  type: string
+                  example: "AdminPasswordx123"
+      responses:
+        '200':
+          description: "Inicio de sesión exitoso"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vy..."
+        '401':
+          description: "Credenciales incorrectas"
+        '500':
+          description: "Error interno del servidor"
+  /employees:
+    post:
+      summary: Crear un nuevo empleado
+      tags:
+        - Empleados
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: ID del usuario asociado al empleado
+                  example: "672db24b4fb984d3ae8d90cf"
+                position:
+                  type: string
+                  description: Posición del empleado
+                  example: "Software Developer"
+                department:
+                  type: string
+                  description: Departamento del empleado
+                  example: "IT"
+                salary:
+                  type: number
+                  description: Salario del empleado
+                  example: 60000
+                skills:
+                  type: array
+                  items:
+                    type: string
+                  description: Habilidades del empleado
+                  example: ["JavaScript", "Node.js", "MongoDB"]
+      responses:
+        '201':
+          description: Empleado creado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employee:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: "672db24b4fb984d3ae8d90cf"
+                      position:
+                        type: string
+                        example: "Software Developer"
+                      department:
+                        type: string
+                        example: "IT"
+                      salary:
+                        type: number
+                        example: 60000
+                      skills:
+                        type: array
+                        items:
+                          type: string
+                        example: ["JavaScript", "Node.js", "MongoDB"]
+                      _id:
+                        type: string
+                        example: "672d2c59de937cf36e4a2071"
+                      hireDate:
+                        type: string
+                        format: date-time
+                        example: "2024-11-07T21:08:41.918Z"
+                  message:
+                    type: string
+                    example: "Empleado creado con éxito"
+    get:
+      summary: Obtener una lista de empleados con paginación
+      tags:
+        - Empleados
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Número de la página de resultados.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+          description: Cantidad de empleados por página.
+      responses:
+        '200':
+          description: Lista de empleados paginada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 5
+                  totalPages:
+                    type: integer
+                    example: 1
+                  totalEmployees:
+                    type: integer
+                    example: 4
+                  employees:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: "672c3951a20c5b13c3040c97"
+                        userId:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              example: "672c37f0a20c5b13c3040c8b"
+                            name:
+                              type: string
+                              example: "Admin User"
+                            email:
+                              type: string
+                              example: "admin@example.com"
+                            role:
+                              type: string
+                              example: "admin"
+                        position:
+                          type: string
+                          example: "Lead Developer"
+                        department:
+                          type: string
+                          example: "IT"
+                        salary:
+                          type: number
+                          example: 85000
+                        skills:
+                          type: array
+                          items:
+                            type: string
+                          example: ["JavaScript", "Node.js", "TypeScript", "MongoDB", "Leadership"]
+                        hireDate:
+                          type: string
+                          format: date-time
+                          example: "2024-11-07T03:51:45.220Z"
+        '401':
+          description: No autorizado, falta el token de autenticación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No autorizado"
+  /employees/{id}:
+    put:
+      summary: Actualizar un empleado existente
+      tags:
+        - Empleados
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del empleado a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                position:
+                  type: string
+                  description: Nueva posición del empleado
+                  example: "Developer Full Stack"
+                department:
+                  type: string
+                  description: Nuevo departamento del empleado
+                  example: "IT"
+                salary:
+                  type: number
+                  description: Nuevo salario del empleado
+                  example: 60000
+                skills:
+                  type: array
+                  items:
+                    type: string
+                  description: Nuevas habilidades del empleado
+                  example: ["JavaScript", "Node.js", "MongoDB"]
+      responses:
+        '200':
+          description: Empleado actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employee:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "672d2c59de937cf36e4a2071"
+                      userId:
+                        type: object
+                        properties:
+                          _id:
+                            type: string
+                            example: "672db24b4fb984d3ae8d90cf"
+                          name:
+                            type: string
+                            example: "Empleado User"
+                          email:
+                            type: string
+                            example: "empleados@example.com"
+                          role:
+                            type: string
+                            example: "empleado"
+                      position:
+                        type: string
+                        example: "Developer Full Stack"
+                      department:
+                        type: string
+                        example: "IT"
+                      salary:
+                        type: number
+                        example: 60000
+                      skills:
+                        type: array
+                        items:
+                          type: string
+                        example: ["JavaScript", "Node.js", "MongoDB"]
+                      hireDate:
+                        type: string
+                        format: date-time
+                        example: "2024-11-07T21:08:41.918Z"
+                  message:
+                    type: string
+                    example: "Empleado actualizado exitosamente"
+    get:
+      summary: Obtener detalles de un empleado por ID
+      tags:
+        - Empleados
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del empleado a buscar.
+      responses:
+        '200':
+          description: Detalles del empleado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: "672d2c59de937cf36e4a2071"
+                  userId:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "672d2b44bfb984d3ae8d90cf"
+                      name:
+                        type: string
+                        example: "Empleado User"
+                      email:
+                        type: string
+                        example: "empleados@example.com"
+                      role:
+                        type: string
+                        example: "empleado"
+                  position:
+                    type: string
+                    example: "Developer Full Stack"
+                  department:
+                    type: string
+                    example: "IT"
+                  salary:
+                    type: integer
+                    example: 60000
+                  skills:
+                    type: array
+                    items:
+                      type: string
+                    example: ["JavaScript", "Node.js", "MongoDB"]
+                  hireDate:
+                    type: string
+                    format: date-time
+                    example: "2024-11-07T21:08:41.918Z"
+                  __v:
+                    type: integer
+                    example: 0
+        '401':
+          description: No autorizado, falta el token de autenticación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No autorizado"
+        '404':
+          description: Empleado no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Empleado no encontrado"
+  /evaluations:
+    post:
+      summary: Crear una nueva evaluación
+      tags:
+        - Evaluaciones
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeId:
+                  type: string
+                  description: ID del empleado que será evaluado
+                  example: "672c3979a20c5b13c3040ca0"
+                reviewerId:
+                  type: string
+                  description: ID del revisor que evaluará al empleado
+                  example: "672c3965a20c5b13c3040c9b"
+                period:
+                  type: string
+                  description: Periodo de la evaluación
+                  example: "2024-Q1"
+                type:
+                  type: string
+                  description: Tipo de evaluación
+                  example: "Rendimiento Mensual"
+                status:
+                  type: string
+                  description: Estado inicial de la evaluación
+                  example: "pending"
+      responses:
+        '201':
+          description: Evaluación creada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  evaluation:
+                    type: object
+                    properties:
+                      employeeId:
+                        type: string
+                        example: "672c3979a20c5b13c3040ca0"
+                      reviewerId:
+                        type: string
+                        example: "672c3965a20c5b13c3040c9b"
+                      period:
+                        type: string
+                        example: "2024-Q1"
+                      type:
+                        type: string
+                        example: "Rendimiento Mensual"
+                      status:
+                        type: string
+                        example: "pending"
+                      questions:
+                        type: array
+                        items:
+                          type: string
+                        example: []
+                      totalScore:
+                        type: integer
+                        example: 0
+                      lastNotifiedAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+                      _id:
+                        type: string
+                        example: "672d2ed328eb586b4a5e02b7"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-11-07T21:19:15.826Z"
+                      __v:
+                        type: integer
+                        example: 0
+                  message:
+                    type: string
+                    example: "Evaluacion creada con éxito"
+        '400':
+          description: Datos de entrada inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Datos inválidos en la solicitud"
+    get:
+      summary: Obtener una lista de evaluaciones con paginación
+      description: "Este endpoint permite obtener todas las evaluaciones con paginación."
+      tags:
+        - Evaluaciones
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Número de la página de resultados.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 5
+          description: Cantidad de evaluaciones por página.
+      responses:
+        '200':
+          description: Lista de evaluaciones paginada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 5
+                  totalPages:
+                    type: integer
+                    example: 1
+                  totalEvaluations:
+                    type: integer
+                    example: 5
+                  evaluations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lastNotifiedAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                          example: null
+                        _id:
+                          type: string
+                          example: "672c3b1c22668e97786c2efc"
+                        employeeId:
+                          type: string
+                          example: "672c3979a20c5b13c3040ca0"
+                        reviewerId:
+                          type: string
+                          example: "672c3965a20c5b13c3040c9b"
+                        period:
+                          type: string
+                          example: "2024-Q1"
+                        status:
+                          type: string
+                          example: "completed"
+                        type:
+                          type: string
+                          example: "Rendimiento Mensual"
+                        questions:
+                          type: array
+                          items:
+                            type: string
+                          example: []
+                        totalScore:
+                          type: integer
+                          example: 21
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: "2024-11-07T03:59:24.367Z"
+        '401':
+          description: No autorizado, falta el token de autenticación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No autorizado"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+  /evaluations/{id}:
+    get:
+      summary: Obtener una evaluación por ID
+      description: "Este endpoint permite obtener una evaluación específica por su ID, incluyendo sus preguntas y respuestas."
+      tags:
+        - Evaluaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la evaluación a consultar
+      responses:
+        '200':
+          description: Detalles de la evaluación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lastNotifiedAt:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    example: null
+                  _id:
+                    type: string
+                    example: "672cd5ca58d74db88710bb0a"
+                  employeeId:
+                    type: string
+                    example: "672c3979a20c5b13c3040ca0"
+                  reviewerId:
+                    type: string
+                    example: "672c3965a20c5b13c3040c9b"
+                  period:
+                    type: string
+                    example: "2024-Q1"
+                  status:
+                    type: string
+                    example: "completed"
+                  type:
+                    type: string
+                    example: "Rendimiento Mensual"
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: "672cd684c3c4179ec85e920d"
+                        evaluationId:
+                          type: string
+                          example: "672cd5ca58d74db88710bb0a"
+                        content:
+                          type: string
+                          example: "¿Qué es Node.js y cuáles son sus usos principales?"
+                        answers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                                example: "672cf23a59b612bd3a3ed8b0"
+                              evaluationId:
+                                type: string
+                                example: "672cd5ca58d74db88710bb0a"
+                              questionId:
+                                type: string
+                                example: "672cd684c3c4179ec85e920d"
+                              answerText:
+                                type: string
+                                example: "Node.js es un entorno de ejecución para JavaScript que permite crear aplicaciones del lado del servidor."
+                              score:
+                                type: integer
+                                example: 4
+                              createdAt:
+                                type: string
+                                format: date-time
+                                example: "2024-11-07T17:00:47.066Z"
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: "2024-11-07T15:02:28.341Z"
+                  totalScore:
+                    type: integer
+                    example: 21
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2024-11-07T15:02:28.341Z"
+        '404':
+          description: No se encontró la evaluación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Evaluación no encontrada"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+    put:
+      summary: Actualizar una evaluación por ID
+      description: "Este endpoint permite actualizar una evaluación específica por su ID."
+      tags:
+        - Evaluaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la evaluación a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                period:
+                  type: string
+                  description: Periodo de la evaluación
+                  example: "2025-Q1"
+                type:
+                  type: string
+                  description: Tipo de evaluación
+                  example: "Rendimiento Anual"
+                status:
+                  type: string
+                  description: Estado de la evaluación
+                  example: "pending"
+      responses:
+        '200':
+          description: Evaluación actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  evaluation:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "672d2ed320eb5876b45c02b7"
+                      employeeId:
+                        type: string
+                        example: "672c3979a20c5b13c3040ca0"
+                      reviewerId:
+                        type: string
+                        example: "672c3965a20c5b13c3040c9b"
+                      period:
+                        type: string
+                        example: "2025-Q1"
+                      status:
+                        type: string
+                        example: "pending"
+                      type:
+                        type: string
+                        example: "Rendimiento Anual"
+                      questions:
+                        type: array
+                        items:
+                          type: object
+                      totalScore:
+                        type: integer
+                        example: 0
+                      lastNotifiedAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: "2024-11-07T21:20:00.507Z"
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-11-07T21:19:15.826Z"
+                  message:
+                    type: string
+                    example: "Evaluacion actualizada con éxito"
+        '404':
+          description: Evaluación no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Evaluación no encontrada"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+  /evaluations/{id}/submit:
+    post:
+      summary: Enviar respuestas para una evaluación
+      description: Permite enviar las respuestas de una evaluación específica.
+      tags:
+        - Evaluaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la evaluación a la que se enviarán las respuestas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      questionId:
+                        type: string
+                        description: ID de la pregunta
+                        example: "672cd684c3c4179ec85e920d"
+                      answerText:
+                        type: string
+                        description: Texto de la respuesta
+                        example: "Node.js es un entorno de ejecución para JavaScript que permite crear aplicaciones del lado del servidor."
+      responses:
+        '200':
+          description: Evaluación enviada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Evaluation submitted successfully"
+        '404':
+          description: Evaluación o pregunta no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Evaluación no encontrada"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+  /evaluations/{id}/evaluate:
+    put:
+      summary: Evaluar respuestas de una evaluación
+      description: Permite que un evaluador asigne puntuaciones a las respuestas de una evaluación específica.
+      tags:
+        - Evaluaciones
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la evaluación que será evaluada
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      questionId:
+                        type: string
+                        description: ID de la pregunta evaluada
+                        example: "672cd684c3c4179ec85e920d"
+                      score:
+                        type: integer
+                        description: Puntuación asignada a la respuesta
+                        example: 4
+      responses:
+        '200':
+          description: Evaluación completada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Evaluación completada exitosamente"
+        '404':
+          description: Evaluación o pregunta no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Evaluación no encontrada"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+  /questions:
+    get:
+      summary: Obtener lista de preguntas con paginación
+      description: Obtiene una lista de preguntas con sus detalles, incluyendo el contenido y las respuestas asociadas.
+      tags:
+        - Preguntas
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: Número de página para la paginación.
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Número de preguntas por página.
+      responses:
+        '200':
+          description: Lista de preguntas con paginación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 10
+                  totalPages:
+                    type: integer
+                    example: 2
+                  totalQuestions:
+                    type: integer
+                    example: 15
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: "672c3cf112c78e761561494a"
+                        evaluationId:
+                          type: string
+                          example: "672c3b1c2266e978786c2efc"
+                        content:
+                          type: string
+                          example: "¿Qué es Node.js y cuáles son sus usos principales?"
+                        answers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                                example: "672c3c15840feea20d6ccfbd"
+                              answerText:
+                                type: string
+                                example: "Node.js es un entorno de ejecución para JavaScript que permite crear aplicaciones del lado del servidor."
+                              score:
+                                type: integer
+                                example: 4
+                              createdAt:
+                                type: string
+                                format: date-time
+                                example: "2024-11-07T07:00:47.066Z"
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: "2024-11-07T04:17:03.973Z"
+        '401':
+          description: No autorizado, falta el token de autenticación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No autorizado"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+    post:
+      summary: Crear una lista de preguntas para una evaluación
+      description: Permite crear varias preguntas para una evaluación específica proporcionada en el cuerpo de la solicitud.
+      tags:
+        - Preguntas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evaluationId:
+                  type: string
+                  description: ID de la evaluación a la cual se asocian las preguntas.
+                  example: "672d2ed320eb5876b45c02b7"
+                questions:
+                  type: array
+                  description: Lista de preguntas a agregar.
+                  items:
+                    type: string
+                    example: "¿Qué es Node.js y cuáles son sus usos principales?"
+      responses:
+        '201':
+          description: Preguntas creadas con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        evaluationId:
+                          type: string
+                          example: "672d2ed320eb5876b45c02b7"
+                        content:
+                          type: string
+                          example: "¿Qué es Node.js y cuáles son sus usos principales?"
+                        answers:
+                          type: array
+                          items:
+                            type: object
+                            example: []
+                        _id:
+                          type: string
+                          example: "672d2f237e2247c2a42c49a7"
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: "2024-11-07T21:36:50.856Z"
+                        __v:
+                          type: integer
+                          example: 0
+        '400':
+          description: Error en la solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error en la solicitud"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+  /questions/{id}:
+    put:
+      summary: Actualizar una pregunta existente
+      description: Permite actualizar el contenido de una pregunta asociada a una evaluación específica.
+      tags:
+        - Preguntas
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID de la pregunta a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                evaluationId:
+                  type: string
+                  description: ID de la evaluación a la cual pertenece la pregunta.
+                  example: "672cd5ca58d74db88710bb0a"
+                content:
+                  type: string
+                  description: Nuevo contenido de la pregunta.
+                  example: "¿Qué es Node.js y cuáles son sus usos principales???"
+      responses:
+        '200':
+          description: Pregunta actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  question:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: "672cd684c3c4179ec85e920d"
+                      evaluationId:
+                        type: string
+                        example: "672cd5ca58d74db88710bb0a"
+                      content:
+                        type: string
+                        example: "¿Qué es Node.js y cuáles son sus usos principales???"
+                      answers:
+                        type: array
+                        items:
+                          type: object
+                        example: []
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: "2024-11-07T15:02:28.341Z"
+                      __v:
+                        type: integer
+                        example: 0
+                  message:
+                    type: string
+                    example: "Pregunta actualizada exitosamente"
+        '400':
+          description: Error en la solicitud
+        '404':
+          description: Pregunta no encontrada
+        '500':
+          description: Error interno del servidor
+  /reports/employee/{id}:
+    get:
+      summary: Obtener el reporte de evaluaciones por empleado
+      description: Genera un reporte con las evaluaciones de un empleado específico, incluyendo estadísticas.
+      tags:
+        - Reporte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID del empleado para el cual se generará el reporte
+      responses:
+        '200':
+          description: Reporte de evaluaciones generado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employee:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: "Empleado User"
+                      position:
+                        type: string
+                        example: "Software Developer"
+                      department:
+                        type: string
+                        example: "IT"
+                  evaluations:
+                    type: array
+                    items:
+                      type: object
+                  stats:
+                    type: object
+                    properties:
+                      totalEvaluations:
+                        type: integer
+                        example: 5
+                      pendingEvaluations:
+                        type: integer
+                        example: 3
+                      inProgressEvaluations:
+                        type: integer
+                        example: 0
+                      completedEvaluations:
+                        type: integer
+                        example: 2
+                      totalScore:
+                        type: integer
+                        example: 41
+                  generatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-11-07T21:52:17.096Z"
+        '404':
+          description: Empleado no encontrado
+        '500':
+          description: Error interno del servidor
+  /reports/department/{department}:
+    get:
+      summary: Obtener el reporte de evaluaciones por departamento
+      description: Genera un reporte de evaluaciones agrupadas por departamento, incluyendo estadísticas agregadas.
+      tags:
+        - Reporte
+      parameters:
+        - name: department
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Nombre del departamento para el cual se generará el reporte
+      responses:
+        '200':
+          description: Reporte de evaluaciones por departamento generado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  department:
+                    type: string
+                    example: "IT"
+                  employees:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "Empleado User"
+                        position:
+                          type: string
+                          example: "Software Developer"
+                        department:
+                          type: string
+                          example: "IT"
+                  evaluations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          example: "672c3b6122a0a8f98765dfcd"
+                        employeeId:
+                          type: string
+                          example: "672c3979a20c5b13c3040ca0"
+                        reviewerId:
+                          type: string
+                          example: "672c3965a20c5b13c3040c9b"
+                        period:
+                          type: string
+                          example: "2024-Q1"
+                        status:
+                          type: string
+                          example: "completed"
+                        type:
+                          type: string
+                          example: "Rendimiento Mensual"
+                        totalScore:
+                          type: integer
+                          example: 41
+                        createdAt:
+                          type: string
+                          format: date-time
+                          example: "2024-11-07T21:54:32.827Z"
+                  stats:
+                    type: object
+                    properties:
+                      totalEvaluations:
+                        type: integer
+                        example: 5
+                      pendingEvaluations:
+                        type: integer
+                        example: 3
+                      inProgressEvaluations:
+                        type: integer
+                        example: 0
+                      completedEvaluations:
+                        type: integer
+                        example: 2
+                      totalScore:
+                        type: integer
+                        example: 41
+                  generatedAt:
+                    type: string
+                    format: date-time
+                    example: "2024-11-07T21:54:32.827Z"
+        '404':
+          description: Departamento no encontrado o no hay evaluaciones
+        '500':
+          description: Error interno del servidor
